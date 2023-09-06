@@ -63,6 +63,47 @@ alter table user1
  --## set default value in a COLUMN
  alter TABLE user1
   alter column demu set default 'add_text';
+ --## delete default value in a COLUMN
+ alter TABLE user1
+  alter column demu drop default;
 
   --## insert values in a table
-  insert into user1 values(1, 'demu_1', 'demu_1');
+  insert into user1 values(2, 'demu_2', 'demu_2');
+
+--## rename column in a table
+   alter TABLE user1
+  RENAME column demu to country;
+
+--## set CONSTRAINT in a table column
+   alter TABLE user1
+    alter country set NOT NULL;
+
+    --## set unique CONSTRAINT in a table COLUMN
+    alter table user1
+    ADD Constraint unique_email UNIQUE(email);
+
+     --## drop unique CONSTRAINT from a table COLUMN
+    alter table user1
+    DROP Constraint unique_email
+
+    --##--
+    create TABLE Department(
+        deptId SERIAL PRIMARY KEY,
+        deptName VARCHAR(50) NOT NULL
+    );
+    insert into Department VALUES(1, 'Chemistry');
+
+    delete from Department where deptId=1
+
+    create table Employee(
+        empId SERIAL PRIMARY KEY,
+        empName VARCHAR(50) NOT NULL,
+        departmentId INT,
+        constraint fk_constraint_dept 
+        Foreign Key (departmentId)
+        REFERENCES Department(deptId)
+    );
+
+    insert into Employee VALUES(1,'raihan', 1)
+
+    delete from Employee where departmentId=1
