@@ -106,4 +106,12 @@ alter table user1
 
     insert into Employee VALUES(1,'raihan', 1)
 
+--## delete specific data from a table column
     delete from Employee where departmentId=1
+
+    create table Courses(
+      courseId serial PRIMARY KEY,
+      course_name VARCHAR(50) NOT NULL,
+      description VARCHAR(255),
+      published_date DATE
+    );
