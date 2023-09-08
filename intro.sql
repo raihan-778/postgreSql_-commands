@@ -1,10 +1,5 @@
--- Active: 1694014328483@@127.0.0.1@5432@university_management@public
- create table Courses(
-      courseId serial PRIMARY KEY,
-      course_name VARCHAR(50) NOT NULL,
-      description VARCHAR(255),
-      published_date DATE
-    );-- Active: 1693892583935@@127.0.0.1@5432@test_01
+-- Active: 1693892583935@@127.0.0.1@5432@university_management@public
+-- Active: 1693892583935@@127.0.0.1@5432@test_01
 --## Create A students TABLE
 -- create TABLE students (
 --  student_id INTEGER,
@@ -92,88 +87,14 @@ alter table user1
     alter table user1
     DROP Constraint unique_email
 
-    --##--
-    create TABLE Department(
-        deptId SERIAL PRIMARY KEY,
-        deptName VARCHAR(50) NOT NULL
-    );
-    insert into Department VALUES(1, 'Chemistry');
-
-    delete from Department where deptId=1
-
-    create table Employee(
-        empId SERIAL PRIMARY KEY,
-        empName VARCHAR(50) NOT NULL,
-        departmentId INT,
-        constraint fk_constraint_dept 
-        Foreign Key (departmentId)
-        REFERENCES Department(deptId)
-    );
-
-    insert into Employee VALUES(1,'raihan', 1)
-
---## delete specific data from a table column
-    delete from Employee where departmentId=1
-
-    create table Courses(
-      courseId serial PRIMARY KEY,
-      course_name VARCHAR(50) NOT NULL,
-      description VARCHAR(255),
-      published_date DATE
-    );
-
-    SELECT * FROM Courses;
-    insert into Courses(course_name, description, published_date) VALUES
-    ('PostgreSQL', 'PostgreSQL for beginers', '2020-03-25'),
-        ('PostgreSQL Advanced Topic', 'PostgreSQL with in dapth', '2020-05-20'),
-        ('Postgre High performance', NULL, NULL),
-        ('Mastering PostgreSql', 'Mastering PostgreSql in 2 month', '2012-03-15' );
-
-select * from Courses;
---#update database table row
--- update table_name
--- set 
--- column1=value,
--- column1=value
--- WHERE condition
-update courses
-set 
-course_name='PostgreSQL for developer',
-description='PostgreSQL in 21 days'
-
-where courseId=1
-
-select * from Courses;
-
-create TABLE if NOT exists Departments(
-deptID SERIAL PRIMARY KEY,
-deptName TEXT NOT NULL
-);
-
-
-CREATE TABLE if NOT exists Employees(
-  empId SERIAL PRIMARY KEY,
-  empName TEXT NOT NULL,
-  email TEXT NOT NULL,
-  salary INTEGER NOT NULL,
-  joining_date DATE NOT NULL,
-  deptID INTEGER NOT NULL,
-  constraint fk_deptID
-    FOREIGN KEY(deptID)
-    REFERENCES Departments(deptID)
-);
-
 insert into Departments values
 (1, 'Accounts'),
 (2, 'Finance'),
 (3,'Development'),
 (4, 'Testing');
 
-select * from Departments
 
-select * from Employees;
-
-insert into Employees (empName, email, salary, joining_date, deptID)
+    insert into Employees (empName, email, salary, joining_date, deptID)
 VALUES
 ('Ruth Turner', 'ruth.turner@example.com', 67000.00, '2027-08-20', 2),
 ('Larry Martin', 'larry.martin@example.com', 60000.00, '2027-09-27', 4),
@@ -218,57 +139,81 @@ VALUES
 ('Nancy Turner', 'nancy.turner@example.com', 61000.00, '2030-12-28', 3)
 ;
 
+    --##--
+    create TABLE Department(
+        deptId SERIAL PRIMARY KEY,
+        deptName VARCHAR(50) NOT NULL
+    );
+    insert into Department VALUES(1, 'Chemistry');
 
---## filter one or more specific field from a table
-select empID, empName from Employees
+    delete from Department where deptId=1
+
+    create table Employee(
+        empId SERIAL PRIMARY KEY,
+        empName VARCHAR(50) NOT NULL,
+        departmentId INT,
+        constraint fk_constraint_dept 
+        Foreign Key (departmentId)
+        REFERENCES Department(deptId)
+    );
+
+    insert into Employee VALUES(1,'raihan', 1)
+
+--## delete specific data from a table column
+    delete from Employee where departmentId=1
+
+    create table Courses(
+      courseId serial PRIMARY KEY,
+      course_name VARCHAR(50) NOT NULL,
+      description VARCHAR(255),
+      published_date DATE
+    );
+
+insert into Courses(course_name, description, published_date)
+VALUES
+  ('Basic posgreSql', 'basic sql for beginers', '2014-5-24'),
+  ('Advanced PostgreSql', 'Advanced topic of Sql', '2010-5-19'),
+  ('PostgreSQL', 'Advanced topic of Sql with project', '2018-5-19' );
+  
+update Courses
+set 
+  course_name='Introduction to postgreSQL',
+  published_date='2017-05-19'
+  where courseId >1 or courseId <4
+
+select * from Courses
+
+--## delete Rows in a TABLE
+
+delete FROM Courses
+where courseId=1
+
+create TABLE if NOT exists Departments(
+deptID SERIAL PRIMARY KEY,
+deptName TEXT NOT NULL
+);
 
 
---## data shorting using multiple condition
-select * from Employees
-WHERE empName <> 'Gary Lee' AND salary>74000 or empName='Sandra Lee'
+CREATE TABLE if NOT exists Employees(
+  empId SERIAL PRIMARY KEY,
+  empName TEXT NOT NULL,
+  email TEXT NOT NULL,
+  salary int NOT NULL,
+  joining_date DATE NOT NULL,
+  deptID INTEGER NOT NULL,
+  constraint fk_deptID
+    FOREIGN KEY(deptID)
+    REFERENCES Departments(deptID)
+);
 
 
---## data shorting by asc or desc order
-select * from Employees
-ORDER BY salary DESC;
+insert into Departments values
+(1, 'Accounts'),
+(2, 'Finance'),
+(3,'Development'),
+(4, 'Testing');
 
-select * from Employees
-ORDER BY empName DESC LIMIT 10 OFFSET 0
-
---Sorting highest or lowest salary payer employee
-select * from Employees where salary=(select MIN(salary) from Employees)
-
-SELECT * FROM (
-  SELECT emp_name, emp_salary, DENSE_RANK() OVER (ORDER BY emp_salary DESC) AS r
-  FROM emp
-) AS subquery
-WHERE r = 3;
-
-select distinct(salary) as salary from Employees order by salary desc offset 2 limit 1
-
-select distinct(salary) as salary from Employees order by salary desc offset 2 limit 1
-
---## IN, NOT IN, BETWEEN, LIKE query TYPE
-select * from Employees where empId in (53,80,127)
-
-select * from Employees where empId NOT in (53,80,127)
-
-
-select * from Employees where salary BETWEEN 52000 AND 60000
-
-
-select * from Employees where empName like 'B%'--here "b%" find the name starts with b.
-
-select * from Employees where empName like '%e'  -- here "e%" find the name ends with e.
-
-select * from Employees where empName like '%ame%'  -- here "%am%" find the name includes "am" in the middle of a name.
-
-select * from Employees where empName like '_ame%'  -- here "_ame%" find the name includes "ame" after 1 character of a name.
-
-select * from Employees where empName like '__i_________';  -- here "__i_______%" find the name includes "a" after 2 character and 7 character after i of a name.
-select * from Employees where empName like 'M%n';  -- here "M%n" find the name includes "M" as first CHARACTER & "n" as last in  a name.other CHARACTER between M & n is UNKNOWN.
-
---## concept of joining of one table with another table using REFERENCES key.
+select * from departments
 
 create TABLE if NOT exists Department(
   department_id INTEGER PRIMARY KEY,
@@ -287,7 +232,7 @@ values
 select * from Department
 
 CREATE TABLE if NOT exists Employee(
-  empId SERIAL PRIMARY KEY,
+  employee_id SERIAL PRIMARY KEY,
   full_name VARCHAR(100),
   department_id INT,
   job_role VARCHAR(100),
@@ -295,7 +240,7 @@ CREATE TABLE if NOT exists Employee(
   FOREIGN KEY(department_id)
     REFERENCES Department(department_id)
 );
-INSERT INTO Employee(empId, full_name, department_id, job_role, manager_id)
+INSERT INTO Employee(employee_id, full_name, department_id, job_role, manager_id)
 VALUES
   (DEFAULT, 'John Doe', 1, 'Front-end Development', 2),
   (DEFAULT, 'Jane Smith', 3, 'Back-end Development', 4),
@@ -346,3 +291,23 @@ NATURAL JOIN department;
 --cross join
 select * FROM employee
 CROSS JOIN department;
+
+--Aggrigate FUNCTION
+ select AVG(salary) Avg_Salary from employees --here Avg_Salary is eliasing that means we have given a name for avg salary.It can be any name,
+
+ select deptid , SUM(salary) from employees GROUP BY deptid 
+
+--aggrigation function with group BY
+select d.deptname ,AVG(e.salary), sum(e.salary), max(e.salary) from employees AS e
+JOIN departments as d on e.deptid=d.deptid
+GROUP BY d.deptname --here "as" is used for eliasing a name for departments & employees, join is used to table join & GROUP BY is used to group the calculated data by group.deptid
+
+
+select d.deptname, avg(salary), sum(salary), min(salary), count(*) from departments d
+join employees e on d.deptid=e.deptid
+GROUP BY d.deptid
+
+--aggrigation & grouping with filter
+select d.deptname, avg(salary), sum(salary), min(salary), count(*) from departments d
+join employees e on d.deptid=e.deptid
+GROUP BY d.deptid HAVING avg(salary) > 65000;
