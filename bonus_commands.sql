@@ -1,3 +1,4 @@
+-- Active: 1694014328483@@127.0.0.1@5432@advanced_sql_commands@public
 --## Store PROCEDURE method
 create PROCEDURE deactivate_unpaid_account()
 language sql
@@ -19,3 +20,35 @@ declare account_count integer
         return account_count
     end
 $$
+
+--Trigger & function 
+
+create TABLE products(
+    id SERIAL PRIMARY KEY,
+    title VARCHAR(255) NOT NULL,
+    base_price float8 NOT NULL,
+    final_price float8
+);
+
+select * from products
+
+insert into products(title, base_price) values('Black', 105)
+
+
+create or REPLACE TRIGGER add_tex_trigger
+AFTER
+INSERT ON products
+for each ROW
+EXECUTE FUNCTION update_final_price();
+
+
+
+CREATE OR REPLACE FUNCTION update_final_price()
+RETURNS TRIGGER
+LANGUAGE plpgsql
+AS $$
+    BEGIN
+    NEW.final_price := NEW.base_price * 1.05;
+    RETURN NEW;
+    END;
+$$;
